@@ -11,6 +11,8 @@ output:
 ```{r load-pkg, message = FALSE}
 library(tidyverse)
 library(skimr)
+library(forcats)
+library(scales)
 ```
 
 ```{r load-data, message = FALSE}
@@ -24,9 +26,11 @@ First, knit the document and view the following visualisation. How are the month
 
 ```{r plot, fig.width=10}
 hotels %>%
+    mutate(arrival_date_month = fct_relevel(arrival_date_month, c("January", "February", "March", "April", "May", "June", "July", "August", "September","October", "November", "December"))) %>% 
   group_by(hotel, arrival_date_month) %>%   # group by hotel type and arrival month
   summarise(mean_adr = mean(adr)) %>%       # calculate mean adr for each group
-  ggplot(aes(
+
+         ggplot(aes(
     x = arrival_date_month,                 # x-axis = arrival_date_month
     y = mean_adr,                           # y-axis = mean_adr calculated above
     group = hotel,                          # group lines by hotel type
@@ -38,7 +42,7 @@ hotels %>%
        y = "Mean ADR (average daily rate)",
        title = "Comparison of resort and city hotel prices across months",
        subtitle = "Resort hotel prices soar in the summer while ciry hotel prices remain relatively constant throughout the year",
-       color = "Hotel type")
+       color = "Hotel type") 
 ```
 ## References {#references}
 1. Assignment Adapted from [Mine Cetinkaya-Rundel's Data Science in a Box](https://github.com/rstudio-education/datascience-box)
